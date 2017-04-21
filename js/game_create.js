@@ -1,4 +1,30 @@
 ﻿Game.create = function () {
+
+
+
+
+
+    for (i = 0; i < 100; i++) {
+        var xx = getRandomInt(1, 5000);
+        var yy = getRandomInt(1, 5000);
+        var size = game.rnd.realInRange(1, 4);
+        var rotation = game.rnd.realInRange(1, 360);
+        var cloudVariation = getRandomInt(1, 5);
+
+        var cloud = "cloudBig";
+
+        if (cloudVariation == 3) {
+            cloud = "cloudMid";
+        }
+
+        cloudSprite = game.add.sprite(xx, yy, cloud);
+
+        cloudSprite.scale.setTo(size, size);
+        cloudSprite.rotation = rotation;
+    }
+
+
+
     Game.playerMap = {};
 
 
@@ -41,28 +67,6 @@
     sprintKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
 
     inventoryKeyOne = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-
-
-
-
-    for (i = 0; i < 100; i++) {
-        var xx = getRandomInt(1, 5000);
-        var yy = getRandomInt(1, 5000);
-        var size = game.rnd.realInRange(1, 4);
-        var rotation = game.rnd.realInRange(1, 360);
-        var cloudVariation = getRandomInt(1, 5);
-
-        var cloud = "cloudBig";
-
-        if (cloudVariation == 3) {
-            cloud = "cloudMid";
-        }
-
-        cloudSprite = game.add.sprite(xx, yy, cloud);
-
-        cloudSprite.scale.setTo(size, size);
-        cloudSprite.rotation = rotation;
-    }
 
 
 
