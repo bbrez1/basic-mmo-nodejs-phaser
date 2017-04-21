@@ -28,6 +28,7 @@ io.on('connection',function(socket){
         // player information
         socket.player = {
             id: socket.id,
+            rotation: 0,
             x: randomInt(100, 400),
             y: randomInt(100, 400)
         };
@@ -51,24 +52,29 @@ io.on('connection',function(socket){
 
         // PLAYER MOVEMENT
         socket.on('click',function(data){
-            console.log(socket.player.id + ' move to ' + data.x + ', ' + data.y);
+            //console.log(socket.player.id + ' move to ' + data.x + ', ' + data.y);
             socket.player.x = data.x;
             socket.player.y = data.y;
+            socket.player.rotation = data.rotation;
             io.emit('move', socket.player);
         });
 
 
         // PLAYER TAKES DAMAGE
-        socket.on('takedamage', function (health) {
-            socket.playerInformation.health -= health;
+        socket.on('takedamage', function (data) {
+            socket.playerInformation.health -= data.d;
+            socket.playerInformation.id = data.p;
+
+            console.log(data.d + " takes " + data.p + " damage");
 
             // send new health to player
-            io.to(socket.id).emit('healthChange', socket.playerInformation);
+            //io.to(socket.id).emit('healthChange', socket.playerInformation);
+            io.emit('healthChange', socket.playerInformation);
 
             if (socket.playerInformation.health <= 0)
             {
                 console.log("JUST DIED");
-                io.emit('remove', socket.player.id);
+                io.emit('remove', data.p);
             }
 
         });

@@ -21,8 +21,8 @@ Client.askNewPlayer = function(){
     Client.socket.emit('newplayer');
 };
 
-Client.sendClick = function(x,y){
-  Client.socket.emit('click',{x:x,y:y});
+Client.sendClick = function(x,y,rotation){
+  Client.socket.emit('click',{x:x,y:y,rotation:rotation});
 };
 
 Client.socket.on('newplayer',function(data){
@@ -33,13 +33,16 @@ Client.socket.on('allplayers',function(data){
     for(var i = 0; i < data.length; i++){
         Game.addNewPlayer(data[i].id,data[i].x,data[i].y);
     }
+
+    CONNECTED = true;
+
 });
 
-Client.socket.on('move',function(data){
-    Game.movePlayer(data.id, data.x, data.y);
+Client.socket.on('move', function (data) {
+    Game.movePlayer(data.id, data.x, data.y, data.rotation);
 });
 
-Client.socket.on('remove',function(id){
+Client.socket.on('remove', function (id) {
     Game.removePlayer(id);
 });
 
@@ -49,9 +52,15 @@ Client.socket.on('remove',function(id){
 // player
 
 Client.socket.on('healthChange', function (data) {
-    Game.changeHealth(data);
+    if (data.id == CurrentPlayerId)
+        Game.changeHealth(data);
 });
 
+/*
 Client.sendTakeDamage = function (damage) {
     Client.socket.emit('takedamage', damage);
+};*/
+
+Client.sendTakeDamagePlayer = function (damage, playerId) {
+    Client.socket.emit('takedamage', { d: damage, p: playerId});
 };
